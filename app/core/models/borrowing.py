@@ -16,7 +16,7 @@ class Borrowing(Base):
         default=datetime.now,
     )
     return_date: Mapped[datetime | None] = mapped_column(
-        server_default=func.now(),
+        server_default=None,
         default=None,
     )
 
