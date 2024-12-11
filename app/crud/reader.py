@@ -1,8 +1,8 @@
 from typing import Sequence
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from app.models import Reader, Book, Copy, Borrowing
-from schemas import ReaderCreate
+from core.models.reader import Reader
+from schemas import ReaderCreate, ReaderUpdate, ReaderUpdatePartial
 
 
 async def get_all_readers(
@@ -26,3 +26,23 @@ async def create_reader(
     await session.commit()
     await session.refresh(reader)
     return reader
+
+
+async def update_reader(
+    session: AsyncSession,
+    reader: Reader,
+    reader_update: ReaderUpdate | ReaderUpdatePartial,
+    partial: bool = False,
+) -> Reader:
+    for name, value in reader_update.model_dump(exclude_unset=partial).items():
+        setattr(reader, name, value)
+    await session.commit()
+    return reader
+
+
+async def delete_reader(
+    session: AsyncSession,
+    reader: Reader,
+) -> None:
+    await session.delete(reader)
+    await session.commit()

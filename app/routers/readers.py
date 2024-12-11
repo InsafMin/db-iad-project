@@ -1,10 +1,11 @@
 from typing import Annotated
-
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.database import db_helper
-from app import crud, schemas
-from schemas import Reader
+from core.models.db_helper import db_helper
+from app import schemas
+from app.crud import reader as crud_reader
+from dependencies import reader_by_id
+from schemas import Reader, ReaderUpdatePartial, ReaderUpdate
 
 router = APIRouter()
 
@@ -16,10 +17,10 @@ async def get_reader(
         Depends(db_helper.session_getter),
     ],
 ):
-    return await crud.get_all_readers(session=session)
+    return await crud_reader.get_all_readers(session=session)
 
 
-@router.post("/", response_model=Reader)
+@router.post("/", response_model=Reader, status_code=status.HTTP_201_CREATED)
 async def create_reader(
     reader_create: schemas.ReaderCreate,
     session: Annotated[
@@ -27,18 +28,46 @@ async def create_reader(
         Depends(db_helper.session_getter),
     ],
 ):
-    return await crud.create_reader(session=session, reader_create=reader_create)
+    return await crud_reader.create_reader(session=session, reader_create=reader_create)
 
 
-@router.get("/{reader_id}", response_model=Reader)
+@router.get("/{reader_id}/", response_model=Reader)
 async def get_reader(
-    reader_id: int,
-    session: Annotated[
-        AsyncSession,
-        Depends(db_helper.session_getter),
-    ],
+    reader: Reader = Depends(reader_by_id),
 ):
-    db_reader = await crud.get_reader(session, reader_id)
-    if not db_reader:
-        raise HTTPException(status_code=404, detail="Reader not found")
-    return db_reader
+    return reader
+
+
+@router.put("/{reader_id}/")
+async def update_reader(
+    reader_update: ReaderUpdate,
+    reader: Reader = Depends(reader_by_id),
+    session: AsyncSession = Depends(db_helper.session_getter),
+):
+    return await crud_reader.update_reader(
+        session=session,
+        reader=reader,
+        reader_update=reader_update,
+    )
+
+
+@router.patch("/{reader_id}/")
+async def update_reader_partial(
+    reader_update: ReaderUpdatePartial,
+    reader: Reader = Depends(reader_by_id),
+    session: AsyncSession = Depends(db_helper.session_getter),
+):
+    return await crud_reader.update_reader(
+        session=session,
+        reader=reader,
+        reader_update=reader_update,
+        partial=True,
+    )
+
+
+@router.delete("/{reader_id}/", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_reader(
+    reader: Reader = Depends(reader_by_id),
+    session: AsyncSession = Depends(db_helper.session_getter),
+) -> None:
+    await crud_reader.delete_reader(session=session, reader=reader)
