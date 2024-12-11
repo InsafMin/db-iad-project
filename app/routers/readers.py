@@ -2,10 +2,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.models.db_helper import db_helper
-from app import schemas
-from app.crud import reader as crud_reader
+from crud import reader as crud_reader
 from dependencies import reader_by_id
-from schemas import Reader, ReaderUpdatePartial, ReaderUpdate
+from schemas import Reader, ReaderUpdatePartial, ReaderUpdate, ReaderCreate
 
 router = APIRouter()
 
@@ -22,7 +21,7 @@ async def get_reader(
 
 @router.post("/", response_model=Reader, status_code=status.HTTP_201_CREATED)
 async def create_reader(
-    reader_create: schemas.ReaderCreate,
+    reader_create: ReaderCreate,
     session: Annotated[
         AsyncSession,
         Depends(db_helper.session_getter),

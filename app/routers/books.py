@@ -2,10 +2,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.models.db_helper import db_helper
-from app import schemas
-from app.crud import book as crud_book
+from crud import book as crud_book
 from dependencies import book_by_id
-from schemas import Book, BookUpdatePartial, BookUpdate
+from schemas import Book, BookUpdatePartial, BookUpdate, BookCreate
 
 router = APIRouter()
 
@@ -22,7 +21,7 @@ async def get_books(
 
 @router.post("/", response_model=Book, status_code=status.HTTP_201_CREATED)
 async def create_book(
-    book_create: schemas.BookCreate,
+    book_create: BookCreate,
     session: Annotated[
         AsyncSession,
         Depends(db_helper.session_getter),

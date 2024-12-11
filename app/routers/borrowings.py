@@ -2,10 +2,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.models.db_helper import db_helper
-from app import schemas
-from app.crud import borrowing as crud_borrowing
+from crud import borrowing as crud_borrowing
 from dependencies import borrowing_by_id
-from schemas import Borrowing, BorrowingUpdatePartial, BorrowingUpdate
+from schemas import Borrowing, BorrowingUpdatePartial, BorrowingUpdate, BorrowingCreate
 
 router = APIRouter()
 
@@ -22,7 +21,7 @@ async def get_borrowings(
 
 @router.post("/", response_model=Borrowing, status_code=status.HTTP_201_CREATED)
 async def create_borrowing(
-    borrowing_create: schemas.BorrowingCreate,
+    borrowing_create: BorrowingCreate,
     session: Annotated[
         AsyncSession,
         Depends(db_helper.session_getter),

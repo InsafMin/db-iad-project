@@ -1,5 +1,4 @@
 from typing import Dict
-
 from pydantic import PostgresDsn, BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 

@@ -1,6 +1,4 @@
 from contextlib import asynccontextmanager
-from datetime import datetime
-
 from fastapi import FastAPI
 import uvicorn
 from core.models.db_helper import db_helper

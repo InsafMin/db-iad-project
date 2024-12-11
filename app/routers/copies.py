@@ -2,10 +2,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from core.models.db_helper import db_helper
-from app import schemas
-from app.crud import copy as crud_copy
+from crud import copy as crud_copy
 from dependencies import copy_by_id
-from schemas import Copy, CopyUpdatePartial, CopyUpdate
+from schemas import Copy, CopyUpdatePartial, CopyUpdate, CopyCreate
 
 router = APIRouter()
 
@@ -22,7 +21,7 @@ async def get_copies(
 
 @router.post("/", response_model=Copy, status_code=status.HTTP_201_CREATED)
 async def create_copy(
-    copy_create: schemas.CopyCreate,
+    copy_create: CopyCreate,
     session: Annotated[
         AsyncSession,
         Depends(db_helper.session_getter),

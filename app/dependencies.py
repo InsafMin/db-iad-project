@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import Depends, HTTPException, Path, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.crud import book as crud_book, reader as crud_reader, borrowing as crud_borrowing, copy as crud_copy
+from crud import book as crud_book, reader as crud_reader, borrowing as crud_borrowing, copy as crud_copy
 from core.models import db_helper
 
 
