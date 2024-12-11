@@ -1,8 +1,8 @@
 """first migration
 
-Revision ID: df694f529f8f
+Revision ID: 407d46c9d5d7
 Revises: 
-Create Date: 2024-12-11 19:49:26.592071
+Create Date: 2024-12-11 20:47:19.027542
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "df694f529f8f"
+revision: str = "407d46c9d5d7"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -69,6 +69,7 @@ def upgrade() -> None:
             server_default=sa.text("now()"),
             nullable=True,
         ),
+        sa.Column("id", sa.Integer(), nullable=False),
         sa.ForeignKeyConstraint(
             ["copy_id"],
             ["copies.id"],
@@ -79,9 +80,7 @@ def upgrade() -> None:
             ["readers.id"],
             name=op.f("fk_borrowings_reader_id_readers"),
         ),
-        sa.PrimaryKeyConstraint(
-            "reader_id", "copy_id", "borrow_date", name=op.f("pk_borrowings")
-        ),
+        sa.PrimaryKeyConstraint("id", name=op.f("pk_borrowings")),
     )
     # ### end Alembic commands ###
 

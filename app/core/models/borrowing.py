@@ -9,13 +9,11 @@ if TYPE_CHECKING:
 
 
 class Borrowing(Base):
-    id = None
-    reader_id: Mapped[int] = mapped_column(ForeignKey("readers.id"), primary_key=True)
-    copy_id: Mapped[int] = mapped_column(ForeignKey("copies.id"), primary_key=True)
+    reader_id: Mapped[int] = mapped_column(ForeignKey("readers.id"))
+    copy_id: Mapped[int] = mapped_column(ForeignKey("copies.id"))
     borrow_date: Mapped[datetime] = mapped_column(
         server_default=func.now(),
         default=datetime.now,
-        primary_key=True,
     )
     return_date: Mapped[datetime | None] = mapped_column(
         server_default=func.now(),

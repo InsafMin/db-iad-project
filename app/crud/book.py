@@ -22,7 +22,7 @@ async def create_book(
     book_create: BookCreate,
 ) -> Book:
     if book_create.published_year:
-        bool.return_date = book_create.published_year.replace(tzinfo=None)
+        book_create.published_year = book_create.published_year.replace(tzinfo=None)
     book = Book(**book_create.model_dump())
     session.add(book)
     await session.commit()
@@ -36,6 +36,8 @@ async def update_book(
     book_update: BookUpdate | BookUpdatePartial,
     partial: bool = False,
 ) -> Book:
+    if book_update.published_year:
+        book_update.published_year = book_update.published_year.replace(tzinfo=None)
     for name, value in book_update.model_dump(exclude_unset=partial).items():
         setattr(book, name, value)
     await session.commit()

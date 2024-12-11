@@ -33,14 +33,14 @@ async def create_borrowing(
     )
 
 
-@router.get("/{copy_id}/", response_model=list[Borrowing])
+@router.get("/{borrowing_id}/", response_model=Borrowing)
 async def get_borrowing(
     borrowing: Borrowing = Depends(borrowing_by_id),
 ):
     return borrowing
 
 
-@router.put("/{copy_id}/")
+@router.put("/{borrowing_id}/")
 async def update_borrowing(
     borrowing_update: BorrowingUpdate,
     borrowing: Borrowing = Depends(borrowing_by_id),
@@ -53,7 +53,7 @@ async def update_borrowing(
     )
 
 
-@router.patch("/{copy_id}/")
+@router.patch("/{borrowing_id}/")
 async def update_borrowing_partial(
     borrowing_update: BorrowingUpdatePartial,
     borrowing: Borrowing = Depends(borrowing_by_id),
@@ -67,7 +67,7 @@ async def update_borrowing_partial(
     )
 
 
-@router.delete("/{copy_id}/", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{borrowing_id}/", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_reader(
     borrowing: Borrowing = Depends(borrowing_by_id),
     session: AsyncSession = Depends(db_helper.session_getter),

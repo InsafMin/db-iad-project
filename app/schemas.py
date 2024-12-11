@@ -89,6 +89,7 @@ class BorrowingCreate(BorrowingBase):
 
 class Borrowing(BorrowingBase):
     model_config = ConfigDict(from_attributes=True)
+    id: int
 
 
 class BorrowingUpdate(BorrowingCreate):

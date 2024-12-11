@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Annotated
 from fastapi import Depends, HTTPException, Path, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -49,16 +48,14 @@ async def copy_by_id(
 
 
 async def borrowing_by_id(
-    reader_id: Annotated[int, Path],
-    copy_id: Annotated[int, Path],
+    borrowing_id: Annotated[int, Path],
     session: Annotated[
         AsyncSession,
         Depends(db_helper.session_getter),
     ],
 ):
-    borrowing = await crud_borrowing.get_borrowing(session, reader_id, copy_id)
-    print(f"22222 {borrowing}")
+    borrowing = await crud_borrowing.get_borrowing(session, borrowing_id)
     if borrowing:
         return borrowing
 
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Borrowing ({reader_id} and {copy_id}) not found")
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Borrowing {borrowing_id} not found")

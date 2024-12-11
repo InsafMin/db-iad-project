@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Sequence
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -14,10 +13,8 @@ async def get_all_borrowings(
     return result.all()
 
 
-async def get_borrowing(session: AsyncSession, reader_id: int, copy_id: int) -> Sequence[Borrowing] | None:
-    stmt = select(Borrowing).where(Borrowing.reader_id == reader_id and Borrowing.copy_id == copy_id)
-    result = await session.execute(stmt)
-    return result.all() if result else None
+async def get_borrowing(session: AsyncSession, borrowing_id: int) -> Borrowing | None:
+    return await session.get(Borrowing, borrowing_id)
 
 
 async def create_borrowing(
@@ -40,6 +37,10 @@ async def update_borrowing(
     borrowing_update: BorrowingUpdate | BorrowingUpdatePartial,
     partial: bool = False,
 ) -> Borrowing:
+    if borrowing_update.borrow_date:
+        borrowing_update.borrow_date = borrowing_update.borrow_date.replace(tzinfo=None)
+    if borrowing_update.return_date:
+        borrowing_update.return_date = borrowing_update.return_date.replace(tzinfo=None)
     for name, value in borrowing_update.model_dump(exclude_unset=partial).items():
         setattr(borrowing, name, value)
     await session.commit()
