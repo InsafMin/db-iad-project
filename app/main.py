@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 import uvicorn
 from core.models.db_helper import db_helper
-from routers import readers, books, borrowings, copies
+from routers import readers, books, borrowings, copies, authors
 from core.config import settings
 
 
@@ -17,6 +17,7 @@ async def lifespan(app: FastAPI):
 
 main_app = FastAPI(lifespan=lifespan)
 main_app.include_router(readers.router, prefix="/readers", tags=["Readers"])
+main_app.include_router(authors.router, prefix="/authors", tags=["Authors"])
 main_app.include_router(books.router, prefix="/books", tags=["Books"])
 main_app.include_router(copies.router, prefix="/copies", tags=["Copies"])
 main_app.include_router(borrowings.router, prefix="/borrowing", tags=["Borrowings"])

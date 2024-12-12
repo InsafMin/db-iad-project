@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import Depends, HTTPException, Path, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from crud import book as crud_book, reader as crud_reader, borrowing as crud_borrowing, copy as crud_copy
+from crud import book as crud_book, reader as crud_reader, borrowing as crud_borrowing, copy as crud_copy, author as crud_author
 from core.models import db_helper
 
 
@@ -59,3 +59,17 @@ async def borrowing_by_id(
         return borrowing
 
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Borrowing {borrowing_id} not found")
+
+
+async def author_by_id(
+    author_id: Annotated[int, Path],
+    session: Annotated[
+        AsyncSession,
+        Depends(db_helper.session_getter),
+    ],
+):
+    author = await crud_author.get_author(session, author_id)
+    if author:
+        return author
+
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Author {author_id} not found")

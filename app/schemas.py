@@ -31,7 +31,7 @@ class ReaderUpdatePartial(ReaderCreate):
 
 class BookBase(BaseModel):
     title: Annotated[str, MinLen(2), MaxLen(100)]
-    author: Annotated[str, MinLen(2), MaxLen(50)]
+    author_id: int
     published_year: datetime | None = None
     category: Annotated[str, MinLen(2), MaxLen(50)]
 
@@ -51,7 +51,7 @@ class BookUpdate(BookCreate):
 
 class BookUpdatePartial(BookCreate):
     title: Annotated[str, MinLen(2), MaxLen(100)] | None = None
-    author: Annotated[str, MinLen(2), MaxLen(50)] | None = None
+    author_id: int | None = None
     category: Annotated[str, MinLen(2), MaxLen(50)] | None = None
 
 
@@ -100,3 +100,24 @@ class BorrowingUpdatePartial(BorrowingCreate):
     copy_id: int | None = None
     reader_id: int | None = None
     borrow_date: datetime | None = None
+
+
+class AuthorBase(BaseModel):
+    name: Annotated[str, MinLen(2), MaxLen(100)]
+
+
+class AuthorCreate(AuthorBase):
+    pass
+
+
+class Author(AuthorBase):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+
+
+class AuthorUpdate(AuthorCreate):
+    pass
+
+
+class AuthorUpdatePartial(AuthorCreate):
+    name: Annotated[str, MinLen(2), MaxLen(100)] | None = None

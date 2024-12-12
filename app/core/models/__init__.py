@@ -6,6 +6,7 @@ __all__ = (
     "Book",
     "Borrowing",
     "Reader",
+    "Author",
 )
 
 from .base import Base
@@ -14,3 +15,4 @@ from .copy import Copy
 from .book import Book
 from .borrowing import Borrowing
 from .reader import Reader
+from .author import Author
