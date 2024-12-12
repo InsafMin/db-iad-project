@@ -14,15 +14,7 @@ git clone https://github.com/InsafMin/library_management_api
 cd library_management_api
 ```
 ### Applying Database Migrations
-Before launching the docker container, you need to apply all migrations
-* Create new migration:
-```
-docker-compose run backend alembic revision --autogenerate -m "New migration"
-```
-This will try to capture the newest changes automatically.
-Check that the changes were correctly mapped by looking into 
-the revision file in `/app/alembic/versions`.
-* Apply migrations:
+Before launching the docker container, you need to apply all migrations:
 ```
 docker-compose run backend alembic upgrade head
 ```
