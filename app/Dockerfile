@@ -22,4 +22,4 @@ COPY . /app
 
 # start the server
 #CMD ["uvicorn", "main:main_app", "--host", "0.0.0.0", "--port", "8000"]
-CMD ["sh", "-c", "alembic upgrade head && uvicorn main:main_app --host 0.0.0.0 --port 8000 --reload"]
+#CMD ["sh", "-c", "alembic upgrade head && uvicorn main:main_app --host 0.0.0.0 --port 8000 --reload"]
